@@ -15,7 +15,7 @@ This work is used for reproduce MTCNN, a Joint Face Detection and Alignment usin
 ## Prepare For Training Data
 1. Download Wider Face Training part only from Official Website , unzip to replace `WIDER_train` and put it into `prepare_data` folder.
 2. Download landmark training data from [here](http://mmlab.ie.cuhk.edu.hk/archive/CNN_FacePoint.htm), unzip and put them into `prepare_data` folder.
-3. Run `prepare_data/gen_12net_data.py` to generate training data (Face Detection Part) for **PNet**.
+3. Run `gen_12net_data.py` to generate training data (Face Detection Part) for **PNet**.
 4. Run `gen_landmark_aug_12.py` to generate training data (Face Landmark Detection Part) for **PNet**.
 5. Run `gen_imglist_pnet.py` to merge two parts of training data.
 6. Run `gen_PNet_tfrecords.py` to generate tfrecord for **PNet**.
@@ -31,7 +31,7 @@ This work is used for reproduce MTCNN, a Joint Face Detection and Alignment usin
 ## Some Details
 * When training **PNet**, I merge four parts of data (pos, part, landmark, neg) into one tfrecord, since their ratio is almost 1:1:1:3. But when training **RNet** and **ONet**, I generate four tfrecords, since their total number is not balanced. During training, I read 64 samples from pos, part, and landmark tfrecords, and read 192 samples from neg tfrecord to construct mini-batch.
 * It's important for **PNet** and **RNet** to keep high recall ratio. When using well-trained **PNet** to generate training data for **RNet**, I can get 140k+ pos samples. When using well-trained **RNet** to generate training data for **ONet**, I can get 190k+ pos samples.
-* Since **MTCNN** is a Multi-task Network, we should pay attention to the format of training data.The format is:
+* Since **MTCNN** is a Multi-task Network, we should pay attention to the format of training data. The format is:
  
   [path to image][cls_label][bbox_label][landmark_label]
   
@@ -45,7 +45,7 @@ This work is used for reproduce MTCNN, a Joint Face Detection and Alignment usin
 
 * Since the training data for landmark is less. I use transform, random rotate, and random flip to conduct data augment (the result of landmark detection is not that good).
 
-## Result
+## Results
 
 ![result1.png](https://i.loli.net/2017/08/30/59a6b65b3f5e1.png)
 
@@ -65,7 +65,7 @@ This work is used for reproduce MTCNN, a Joint Face Detection and Alignment usin
 
 ![result9.png](https://i.loli.net/2017/08/30/59a6b843db715.png)
 
-### Result on FDDB
+### Evaluation on FDDB
 ![result10.png](https://i.loli.net/2017/08/30/59a6b875f1792.png)
 
 ## License

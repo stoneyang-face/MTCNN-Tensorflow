@@ -1,2 +1,5 @@
 *.pyc 
 prepare_data/WIDER_train
+prepare_data/12
+prepare_data/lfw_5590
+prepare_data/net_7876
