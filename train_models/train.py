@@ -5,7 +5,7 @@ import os
 from datetime import datetime
 import sys
 sys.path.append("../prepare_data")
-print sys.path
+print(sys.path)
 from read_tfrecord_v2 import read_multi_tfrecords,read_single_tfrecord
 from MTCNN_config import config
 from mtcnn_model import P_Net
@@ -94,17 +94,17 @@ def train(net_factory, prefix, end_epoch, base_dir,
     #label file
     label_file = os.path.join(base_dir,'train_%s_landmark.txt' % net)
     #label_file = os.path.join(base_dir,'landmark_12_few.txt')
-    print label_file 
+    print(label_file)
     f = open(label_file, 'r')
     num = len(f.readlines())
     print("Total datasets is: ", num)
-    print prefix
+    print(prefix)
 
     #PNet use this method to get data
     if net == 'PNet':
         #dataset_dir = os.path.join(base_dir,'train_%s_ALL.tfrecord_shuffle' % net)
         dataset_dir = os.path.join(base_dir,'train_%s_landmark.tfrecord_shuffle' % net)
-        print dataset_dir
+        print(dataset_dir)
         image_batch, label_batch, bbox_batch,landmark_batch = read_single_tfrecord(dataset_dir, config.BATCH_SIZE, net)
         
     #RNet use 3 tfrecords to get data    
@@ -129,12 +129,12 @@ def train(net_factory, prefix, end_epoch, base_dir,
     #landmark_dir    
     if net == 'PNet':
         image_size = 12
-        radio_cls_loss = 1.0;radio_bbox_loss = 0.5;radio_landmark_loss = 0.5;
+        ratio_cls_loss = 1.0;ratio_bbox_loss = 0.5;ratio_landmark_loss = 0.5;
     elif net == 'RNet':
         image_size = 24
-        radio_cls_loss = 1.0;radio_bbox_loss = 0.5;radio_landmark_loss = 0.5;
+        ratio_cls_loss = 1.0;ratio_bbox_loss = 0.5;ratio_landmark_loss = 0.5;
     else:
-        radio_cls_loss = 1.0;radio_bbox_loss = 0.5;radio_landmark_loss = 1.0;
+        ratio_cls_loss = 1.0;ratio_bbox_loss = 0.5;ratio_landmark_loss = 1.0;
         image_size = 48
     
     #define placeholder
@@ -145,7 +145,7 @@ def train(net_factory, prefix, end_epoch, base_dir,
     #class,regression
     cls_loss_op,bbox_loss_op,landmark_loss_op,L2_loss_op,accuracy_op = net_factory(input_image, label, bbox_target,landmark_target,training=True)
     #train,update learning rate(3 loss)
-    train_op, lr_op = train_model(base_lr, radio_cls_loss*cls_loss_op + radio_bbox_loss*bbox_loss_op + radio_landmark_loss*landmark_loss_op + L2_loss_op, num)
+    train_op, lr_op = train_model(base_lr, ratio_cls_loss*cls_loss_op + ratio_bbox_loss*bbox_loss_op + ratio_landmark_loss*landmark_loss_op + L2_loss_op, num)
     # init
     init = tf.global_variables_initializer()
     sess = tf.Session()

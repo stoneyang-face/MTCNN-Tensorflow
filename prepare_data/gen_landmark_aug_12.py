@@ -8,7 +8,7 @@ import numpy as np
 from BBox_utils import getDataFromTxt,processImage,shuffle_in_unison_scary,BBox
 from Landmark_utils import show_landmark,rotate,flip
 import random
-import tensorflow as tf
+# import tensorflow as tf
 import sys
 import numpy.random as npr
 dstdir = "12/train_PNet_landmark_aug"
